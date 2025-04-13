@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GoBank Login</title>
+  <title>GoBank App</title>
   <style>
+    /* === GLOBAL === */
     * {
       box-sizing: border-box;
       font-family: 'Segoe UI', sans-serif;
@@ -24,6 +25,11 @@
       padding: 20px;
     }
 
+    button {
+      cursor: pointer;
+    }
+
+    /* === LOGIN SECTION === */
     #login-section {
       display: flex;
       flex-direction: column;
@@ -107,7 +113,6 @@
       border-radius: 8px;
       font-size: 16px;
       margin-top: 20px;
-      cursor: pointer;
     }
 
     .error-message {
@@ -116,9 +121,9 @@
       margin-top: 10px;
     }
 
+    /* === DASHBOARD === */
     #dashboard-section {
       display: none;
-      width: 100%;
     }
 
     .top-bar {
@@ -244,59 +249,67 @@
       font-weight: bold;
     }
 
-    .otp-screen {
+    /* === OTP MODAL === */
+    #otp-section {
       display: none;
-      flex-direction: column;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      background: #f4fff2;
-      padding: 20px;
     }
 
-    .otp-card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      max-width: 360px;
+    .otp-modal {
+      background-color: #fff;
       width: 100%;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+      padding: 2rem 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
     }
 
-    .otp-card img {
+    .close-btn {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+    }
+
+    .icon {
+      margin: 1rem auto;
       width: 60px;
-      margin-bottom: 10px;
     }
 
     .otp-inputs {
       display: flex;
       justify-content: space-between;
-      margin: 20px 0;
+      margin: 1rem 0;
+      gap: 0.5rem;
     }
 
     .otp-inputs input {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 1.5rem;
       text-align: center;
-      font-size: 18px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
     }
 
     .confirm-btn {
-      background: #6cbf2b;
-      color: white;
+      width: 100%;
+      padding: 0.75rem;
       border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .confirm-btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+      border-radius: 10px;
+      font-size: 1rem;
+      background-color: #00a859;
+      color: white;
+      margin-top: 1rem;
     }
 
     @media (max-width: 480px) {
@@ -306,14 +319,13 @@
 
       .quick-actions {
         flex-direction: column;
-        gap: 10px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Login Section -->
+  <!-- Login -->
   <div id="login-section">
     <div class="container">
       <div class="header">
@@ -341,21 +353,19 @@
     </div>
   </div>
 
-  <!-- Dashboard Section -->
+  <!-- Dashboard -->
   <div id="dashboard-section">
     <div class="top-bar">
       <div class="profile">
         <img src="https://via.placeholder.com/40" alt="Profile">
         <span>Hi, Jacob</span>
       </div>
-      <div>
-        <span>HELP</span> &nbsp; 🔔
-      </div>
+      <div><span>HELP</span> 🔔</div>
     </div>
 
     <section class="balance-card">
-      <div class="balance-info">
-        <span class="label">Available Balance </span>
+      <div>
+        <span>Available Balance</span>
         <h1>USD 4,014.32</h1>
       </div>
       <button class="add-money">+ Add Money</button>
@@ -364,26 +374,20 @@
     <section class="transactions">
       <div class="transaction">
         <div class="icon">%</div>
-        <div class="details">
-          <p>OWealth Interest</p>
-          <small>April 1st, 02:47:46</small>
-        </div>
+        <div class="details"><p>OWealth Interest</p><small>April 1st</small></div>
         <span class="amount success">+ USD 162.09</span>
       </div>
       <div class="transaction">
         <div class="icon">💰</div>
-        <div class="details">
-          <p>MTN/Airtel PLC Interest</p>
-          <small>April 1st, 15:24:16</small>
-        </div>
+        <div class="details"><p>MTN/Airtel PLC</p><small>April 1st</small></div>
         <span class="amount success">+ USD 188.40</span>
       </div>
     </section>
 
     <section class="quick-actions">
-      <button onclick="openOTP('to-opay.html')">To OPay</button>
-      <button onclick="openOTP('to-bank.html')">To Bank</button>
-      <button onclick="openOTP('withdraw.html')">Withdraw</button>
+      <button onclick="openOTP()">To OPay</button>
+      <button onclick="openOTP()">To Bank</button>
+      <button onclick="openOTP()">Withdraw</button>
     </section>
 
     <section class="services">
@@ -419,272 +423,52 @@
     </nav>
   </div>
 
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OTP Verification</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background: linear-gradient(to bottom, #005e3d, #b5d1c5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding: 1rem;
-    }
-
-    .otp-modal {
-      background-color: #fff;
-      width: 100%;
-      max-width: 400px;
-      padding: 2rem 1.5rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      text-align: center;
-      position: relative;
-    }
-
-    .close-btn {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    .icon {
-      margin: 1rem auto;
-      width: 60px;
-    }
-
-    p {
-      margin: 0.5rem 0;
-      color: #333;
-    }
-
-    .instruction {
-      color: #777;
-      font-size: 0.95rem;
-    }
-
-    .otp-inputs {
-      display: flex;
-      justify-content: space-between;
-      margin: 1rem 0;
-      gap: 0.5rem;
-    }
-
-    .otp-inputs input {
-      width: 100%;
-      max-width: 48px;
-      height: 48px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      font-size: 1.5rem;
-      text-align: center;
-      outline: none;
-      transition: border 0.3s;
-    }
-
-    .otp-inputs input:focus {
-      border-color: #00a859;
-    }
-
-    .resend-btn,
-    .confirm-btn {
-      width: 100%;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-    }
-
-    .resend-btn {
-      background-color: #f5f5f5;
-      color: #999;
-      cursor: not-allowed;
-    }
-
-    .confirm-btn {
-      background-color: #ccc;
-      color: white;
-      cursor: not-allowed;
-    }
-
-    .confirm-btn.active {
-      background-color: #00a859;
-      cursor: pointer;
-    }
-
-    .error {
-      color: red;
-      font-size: 0.9rem;
-      margin-top: -0.5rem;
-      margin-bottom: 1rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="otp-modal">
-    <button class="close-btn" onclick="window.location.reload()">&times;</button>
-    <h2>OTP Verification</h2>
-    <img src="https://www.svgrepo.com/show/327429/mobile-message.svg" alt="Phone Icon" class="icon" />
-    <p>An SMS with a Verification code has been sent to <strong>*******818</strong></p>
-    <p class="instruction">Enter the code to proceed</p>
-    
-    <div class="otp-inputs">
-      <input type="text" maxlength="1" />
-      <input type="text" maxlength="1" />
-      <input type="text" maxlength="1" />
-      <input type="text" maxlength="1" />
-      <input type="text" maxlength="1" />
-      <input type="text" maxlength="1" />
+  <!-- OTP Section -->
+  <div id="otp-section">
+    <div class="otp-modal">
+      <button class="close-btn" onclick="closeOTP()">&times;</button>
+      <h2>OTP Verification</h2>
+      <img src="https://www.svgrepo.com/show/327429/mobile-message.svg" class="icon" />
+      <p>Enter the 6-digit code sent to <strong>*******818</strong></p>
+      <div class="otp-inputs">
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+      </div>
+      <button class="confirm-btn" onclick="closeOTP()">Confirm</button>
     </div>
-
-    <div class="error" id="error-msg" style="display: none;">Incorrect OTP. Please try again.</div>
-
-    <button id="resend-btn" class="resend-btn" disabled>Resend OTP 03:00</button>
-    <button id="confirm-btn" class="confirm-btn" disabled>Confirm</button>
   </div>
 
   <script>
-    const inputs = document.querySelectorAll(".otp-inputs input");
-    const confirmBtn = document.getElementById("confirm-btn");
-    const resendBtn = document.getElementById("resend-btn");
-    const errorMsg = document.getElementById("error-msg");
+    function handleLogin(event) {
+      event.preventDefault();
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const error = document.getElementById("error");
 
-    // Autofocus next input
-    inputs.forEach((input, index) => {
-      input.addEventListener("input", () => {
-        if (input.value.length === 1 && index < inputs.length - 1) {
-          inputs[index + 1].focus();
-        }
-        updateConfirmState();
-        errorMsg.style.display = "none";
-      });
-
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Backspace" && input.value === "" && index > 0) {
-          inputs[index - 1].focus();
-        }
-      });
-    });
-
-    // Enable confirm if all filled
-    function updateConfirmState() {
-      const values = Array.from(inputs).map(input => input.value.trim());
-      const isFilled = values.every(val => val.length === 1);
-
-      if (isFilled) {
-        confirmBtn.disabled = false;
-        confirmBtn.classList.add("active");
-      } else {
-        confirmBtn.disabled = true;
-        confirmBtn.classList.remove("active");
-      }
-    }
-
-    confirmBtn.addEventListener("click", () => {
-      const enteredCode = Array.from(inputs).map(input => input.value).join('');
-      if (enteredCode === "030402") {
-        alert("OTP Verified ✅");
-        errorMsg.style.display = "none";
-      } else {
-        errorMsg.style.display = "block";
-      }
-    });
-
-    // Countdown logic
-    let timeLeft = 180;
-    const interval = setInterval(() => {
-      const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-      const seconds = String(timeLeft % 60).padStart(2, '0');
-      resendBtn.textContent = `Resend OTP ${minutes}:${seconds}`;
-
-      if (timeLeft <= 0) {
-        clearInterval(interval);
-        resendBtn.textContent = "Resend OTP";
-        resendBtn.disabled = false;
-        resendBtn.style.backgroundColor = "#00a859";
-        resendBtn.style.color = "white";
-        resendBtn.style.cursor = "pointer";
-      }
-
-      timeLeft--;
-    }, 1000);
-
-  <script>
-    const OTP_CODE = "738201";
-    let redirectAfterOTP = null;
-
-    function handleLogin(e) {
-      e.preventDefault();
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const errorDiv = document.getElementById("error");
-
-      if (username === "JacobAmaitsa" && password === "JacobAmaitsa001") {
+      if (user === "jacob" && pass === "1234") {
         document.getElementById("login-section").style.display = "none";
         document.getElementById("dashboard-section").style.display = "block";
       } else {
-        errorDiv.textContent = "Invalid username or password.";
+        error.textContent = "Invalid credentials.";
       }
     }
 
     function togglePassword() {
-      const pass = document.getElementById("password");
-      pass.type = pass.type === "password" ? "text" : "password";
+      const pw = document.getElementById("password");
+      pw.type = pw.type === "password" ? "text" : "password";
     }
 
-    function openOTP(url) {
-      redirectAfterOTP = url;
-      document.getElementById("dashboard-section").style.display = "none";
-      document.getElementById("otpPage").style.display = "flex";
+    function openOTP() {
+      document.getElementById("otp-section").style.display = "flex";
     }
 
-    const inputs = document.querySelectorAll("#otpInputs input");
-    const confirmBtn = document.getElementById("confirmBtn");
-
-    inputs.forEach((input, index) => {
-      input.addEventListener("input", () => {
-        if (input.value.length > 0 && index < inputs.length - 1) {
-          inputs[index + 1].focus();
-        }
-
-        const enteredCode = Array.from(inputs).map(i => i.value).join("");
-        if (enteredCode.length === 6) {
-          if (enteredCode === OTP_CODE) {
-            confirmBtn.disabled = false;
-            confirmBtn.classList.add("active");
-            confirmBtn.textContent = "Verified";
-            setTimeout(() => {
-              document.getElementById("otpPage").style.display = "none";
-              window.location.href = redirectAfterOTP;
-            }, 1000);
-          } else {
-            confirmBtn.disabled = true;
-            confirmBtn.classList.remove("active");
-            confirmBtn.textContent = "Invalid OTP";
-          }
-        } else {
-          confirmBtn.disabled = true;
-          confirmBtn.classList.remove("active");
-          confirmBtn.textContent = "Confirm";
-        }
-      });
-    });
+    function closeOTP() {
+      document.getElementById("otp-section").style.display = "none";
+    }
   </script>
 </body>
 </html>
