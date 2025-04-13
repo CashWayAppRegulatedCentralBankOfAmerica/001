@@ -312,15 +312,6 @@
       margin-top: 1rem;
     }
 
-    @media (max-width: 480px) {
-      .balance-card h1 {
-        font-size: 20px;
-      }
-
-      .quick-actions {
-        flex-direction: column;
-      }
-    }
   </style>
 </head>
 <body>
@@ -385,9 +376,9 @@
     </section>
 
     <section class="quick-actions">
-      <button onclick="openOTP()">To OPay</button>
-      <button onclick="openOTP()">To Bank</button>
-      <button onclick="openOTP()">Withdraw</button>
+      <button onclick="goToOTP()">To OPay</button>
+      <button onclick="goToOTP()">To Bank</button>
+      <button onclick="goToOTP()">Withdraw</button>
     </section>
 
     <section class="services">
@@ -462,7 +453,9 @@
       pw.type = pw.type === "password" ? "text" : "password";
     }
 
-    function openOTP() {
+    function goToOTP() {
+      // Hide dashboard and show OTP section
+      document.getElementById("dashboard-section").style.display = "none";
       document.getElementById("otp-section").style.display = "flex";
     }
 
