@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoBank App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body, html {
+      height: 100%;
+      background: #f6f6f6;
+    }
+    .hidden {
+      display: none;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #006241;
+      color: white;
+    }
+    .top-bar .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .top-bar .register-btn {
+      border: 1px solid white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: transparent;
+      color: white;
+      font-size: 14px;
+      cursor: default;
+    }
+    .login-container {
+      height: calc(100vh - 60px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-box {
+      background: white;
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+    }
+    .login-box h2 {
+      margin-bottom: 20px;
+      color: #006241;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .login-box button {
+      width: 100%;
+      background: #006241;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .dashboard {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .dashboard .section {
+      background: white;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+    }
+    .balance-card {
+      background: green;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .balance-card .add-money {
+      background: white;
+      color: green;
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: none;
+    }
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+    .transaction .icon {
+      background: lightgray;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+    }
+    .transaction .details {
+      flex-grow: 1;
+      margin-left: 10px;
+    }
+    .amount.success {
+      color: green;
+      font-weight: bold;
+    }
+    .quick-actions {
+      display: flex;
+      justify-content: space-around;
+    }
+    .quick-actions button {
+      background: lightgreen;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      flex: 1;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+    .services {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .service {
+      background: #ebf8f2;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+    }
+    .bottom-nav a {
+      text-decoration: none;
+      color: gray;
+      font-size: 14px;
+    }
+    .bottom-nav .active {
+      color: green;
+      font-weight: bold;
+    }
+    .otp-screen {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 60px);
+      background: #006241;
+    }
+    .otp-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    .otp-card h2 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+    .otp-card img {
+      width: 60px;
+      margin: 20px 0;
+    }
+    .otp-card p {
+      margin-bottom: 20px;
+      color: #444;
+    }
+    .otp-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .otp-inputs input {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      text-align: center;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+    .resend {
+      background: #eee;
+      padding: 10px;
+      border-radius: 8px;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .confirm-btn {
+      background-color: #ccc;
+      color: white;
+      padding: 12px;
+      border: none;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: not-allowed;
+    }
+    .confirm-btn.active {
+      background-color: #006241;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo">GO BANK</div>
+    <button class="register-btn">Register</button>
+  </div>
+
+  <!-- LOGIN PAGE -->
+  <div class="login-container" id="loginPage">
+    <div class="login-box">
+      <h2>Welcome Back</h2>
+      <input type="text" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <button onclick="goToDashboard()">Login</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboardPage">
+    <div class="section balance-card">
+      <div>
+        <span>Available Balance</span>
+        <h1>USD 4,014.32</h1>
+      </div>
+      <button class="add-money">+ Add Money</button>
+    </div>
+
+    <div class="section">
+      <div class="transaction">
+        <div class="icon">%</div>
+        <div class="details">
+          <p>OWealth Interest</p>
+          <small>April 1st, 02:47:46</small>
+        </div>
+        <span class="amount success">+ USD 162.09</span>
+      </div>
+      <div class="transaction">
+        <div class="icon">💰</div>
+        <div class="details">
+          <p>MTN/Airtel PLC</p>
+          <small>April 1st, 15:24:16</small>
+        </div>
+        <span class="amount success">+ USD 188.40</span>
+      </div>
+    </div>
+
+    <div class="section quick-actions">
+      <button onclick="goToOTP()">To OPay</button>
+      <button onclick="goToOTP()">To Bank</button>
+      <button onclick="goToOTP()">Withdraw</button>
+    </div>
+
+    <div class="section services">
+      <div class="service">Airtime</div>
+      <div class="service">Flight</div>
+      <div class="service">School</div>
+      <div class="service">TV</div>
+      <div class="service">Medication</div>
+      <div class="service">Loan</div>
+      <div class="service">E-statements</div>
+      <div class="service">More</div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="#" class="active">🏠 Home</a>
+      <a href="#">🎁 Rewards</a>
+      <a href="#">💰 Finance</a>
+      <a href="#">💳 Cards</a>
+      <a href="#">👤 Me</a>
+    </nav>
+  </div>
+
+  <!-- OTP PAGE -->
+  <div class="otp-screen" id="otpPage">
+    <div class="otp-card">
+      <h2>OTP Verification</h2>
+      <img src="https://cdn-icons-png.flaticon.com/512/876/876019.png" alt="Phone"/>
+      <p>An SMS with a Verification code has been sent to *******818</p>
+
+      <div class="otp-inputs" id="otpInputs">
+        <input type="text" maxlength="1"/>
+        <input type="text" maxlength="1"/>
+        <input type="text" maxlength="1"/>
+        <input type="text" maxlength="1"/>
+        <input type="text" maxlength="1"/>
+        <input type="text" maxlength="1"/>
+      </div>
+
+      <div class="resend">Resend OTP 02:49</div>
+      <button class="confirm-btn" id="confirmBtn" disabled>Confirm</button>
+    </div>
+  </div>
+
+  <script>
+    const OTP_CODE = "738201";
+
+    function goToDashboard() {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('dashboardPage').style.display = 'flex';
+    }
+
+    function goToOTP() {
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('otpPage').style.display = 'flex';
+    }
+
+    const inputs = document.querySelectorAll("#otpInputs input");
+    const confirmBtn = document.getElementById("confirmBtn");
+
+    inputs.forEach((input, index) => {
+      input.addEventListener("input", () => {
+        if (input.value.length > 0 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+        const enteredCode = Array.from(inputs).map(i => i.value).join("");
+        if (enteredCode.length === 6) {
+          if (enteredCode === OTP_CODE) {
+            confirmBtn.disabled = false;
+            confirmBtn.classList.add("active");
+            confirmBtn.textContent = "Verified";
+          } else {
+            confirmBtn.disabled = true;
+            confirmBtn.classList.remove("active");
+            confirmBtn.textContent = "Invalid OTP";
+          }
+        } else {
+          confirmBtn.disabled = true;
+          confirmBtn.classList.remove("active");
+          confirmBtn.textContent = "Confirm";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
