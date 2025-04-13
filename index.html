@@ -1,98 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GoBank App</title>
+  <title>GoBank Login</title>
   <style>
     * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
     }
-    body, html {
-      height: 100%;
-      background: #f6f6f6;
+
+    body {
+      background-color: #f9f9f9;
+      color: #333;
     }
-    .hidden {
+
+    /* Shared Container */
+    .container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Login Styles */
+    #login-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #005c3c;
+      padding: 10px 15px;
+      color: white;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .register-btn {
+      background-color: transparent;
+      border: 2px solid white;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: default;
+    }
+
+    .login-card {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 5px;
+    }
+
+    .helper-link {
+      color: #6cbf2b;
+      font-size: 14px;
+      text-decoration: none;
+      float: right;
+      margin-bottom: 10px;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-visibility {
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .login-btn {
+      width: 100%;
+      background-color: #6cbf2b;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    /* Dashboard Styles */
+    #dashboard-section {
       display: none;
+      width: 100%;
     }
+
     .top-bar {
       display: flex;
       justify-content: space-between;
+      padding: 10px 15px;
+      background: white;
       align-items: center;
-      padding: 15px 20px;
-      background: #006241;
-      color: white;
     }
-    .top-bar .logo {
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .top-bar .register-btn {
-      border: 1px solid white;
-      padding: 6px 12px;
-      border-radius: 6px;
-      background: transparent;
-      color: white;
-      font-size: 14px;
-      cursor: default;
-    }
-    .login-container {
-      height: calc(100vh - 60px);
+
+    .profile {
       display: flex;
-      justify-content: center;
       align-items: center;
     }
-    .login-box {
-      background: white;
-      padding: 30px 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 350px;
-      text-align: center;
+
+    .profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
     }
-    .login-box h2 {
-      margin-bottom: 20px;
-      color: #006241;
-    }
-    .login-box input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .login-box button {
-      width: 100%;
-      background: #006241;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .dashboard {
-      display: none;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    .dashboard .section {
-      background: white;
-      padding: 15px;
-      margin: 10px;
-      border-radius: 10px;
-    }
+
     .balance-card {
       background: green;
       color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .balance-card .add-money {
       background: white;
       color: green;
@@ -100,52 +162,69 @@
       border-radius: 20px;
       border: none;
     }
+
+    .transactions, .quick-actions, .services, .promo, .security {
+      background: white;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+    }
+
     .transaction {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 10px 0;
     }
+
     .transaction .icon {
-      background: lightgray;
-      border-radius: 50%;
       width: 30px;
       height: 30px;
+      background: lightgray;
       text-align: center;
       line-height: 30px;
+      border-radius: 50%;
     }
+
     .transaction .details {
       flex-grow: 1;
       margin-left: 10px;
     }
+
     .amount.success {
       color: green;
       font-weight: bold;
     }
+
     .quick-actions {
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       justify-content: space-around;
     }
+
     .quick-actions button {
-      background: lightgreen;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
       flex: 1;
-      margin: 0 5px;
-      cursor: pointer;
+      background: lightgreen;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      min-width: 90px;
     }
+
     .services {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
       gap: 10px;
     }
+
     .service {
       background: #ebf8f2;
       text-align: center;
       padding: 10px;
       border-radius: 10px;
     }
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -156,110 +235,81 @@
       padding: 10px 0;
       border-top: 1px solid #ddd;
     }
+
     .bottom-nav a {
       text-decoration: none;
       color: gray;
       font-size: 14px;
     }
+
     .bottom-nav .active {
       color: green;
       font-weight: bold;
     }
-    .otp-screen {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 60px);
-      background: #006241;
-    }
-    .otp-card {
-      background: white;
-      border-radius: 12px;
-      padding: 30px 20px;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-    .otp-card h2 {
-      margin-bottom: 10px;
-      font-size: 20px;
-    }
-    .otp-card img {
-      width: 60px;
-      margin: 20px 0;
-    }
-    .otp-card p {
-      margin-bottom: 20px;
-      color: #444;
-    }
-    .otp-inputs {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .otp-inputs input {
-      width: 40px;
-      height: 40px;
-      font-size: 18px;
-      text-align: center;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-    }
-    .resend {
-      background: #eee;
-      padding: 10px;
-      border-radius: 8px;
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    .confirm-btn {
-      background-color: #ccc;
-      color: white;
-      padding: 12px;
-      border: none;
-      width: 100%;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: not-allowed;
-    }
-    .confirm-btn.active {
-      background-color: #006241;
-      cursor: pointer;
+
+    @media (max-width: 480px) {
+      .balance-card h1 {
+        font-size: 20px;
+      }
+
+      .quick-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <div class="top-bar">
-    <div class="logo">GO BANK</div>
-    <button class="register-btn">Register</button>
-  </div>
+  <!-- Login Section -->
+  <div id="login-section">
+    <div class="container">
+      <div class="header">
+        <strong>GO BANK</strong>
+        <button class="register-btn">Register</button>
+      </div>
+      <div class="login-card">
+        <p><strong>Already registered?</strong> Use your credentials to login</p>
+        <form onsubmit="handleLogin(event)">
+          <label for="username">Username *</label>
+          <input type="text" id="username" required />
+          <a href="#" class="helper-link">Forgot username?</a>
 
-  <!-- LOGIN PAGE -->
-  <div class="login-container" id="loginPage">
-    <div class="login-box">
-      <h2>Welcome Back</h2>
-      <input type="text" placeholder="Email" />
-      <input type="password" placeholder="Password" />
-      <button onclick="goToDashboard()">Login</button>
+          <label for="password">Password *</label>
+          <div class="password-container">
+            <input type="password" id="password" required />
+            <button type="button" class="toggle-visibility" onclick="togglePassword()">👁️</button>
+          </div>
+          <a href="#" class="helper-link">Forgot password?</a>
+
+          <button type="submit" class="login-btn">Login</button>
+          <div id="error" class="error-message"></div>
+        </form>
+      </div>
     </div>
   </div>
 
-  <!-- DASHBOARD -->
-  <div class="dashboard" id="dashboardPage">
-    <div class="section balance-card">
+  <!-- Dashboard Section -->
+  <div id="dashboard-section">
+    <div class="top-bar">
+      <div class="profile">
+        <img src="https://via.placeholder.com/40" alt="Profile">
+        <span>Hi, Jacob</span>
+      </div>
       <div>
-        <span>Available Balance</span>
+        <span>HELP</span> &nbsp; 🔔
+      </div>
+    </div>
+
+    <section class="balance-card">
+      <div class="balance-info">
+        <span class="label">Available Balance </span>
         <h1>USD 4,014.32</h1>
       </div>
       <button class="add-money">+ Add Money</button>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="transactions">
       <div class="transaction">
         <div class="icon">%</div>
         <div class="details">
@@ -271,29 +321,42 @@
       <div class="transaction">
         <div class="icon">💰</div>
         <div class="details">
-          <p>MTN/Airtel PLC</p>
+          <p>MTN/Airtel PLC Interest</p>
           <small>April 1st, 15:24:16</small>
         </div>
         <span class="amount success">+ USD 188.40</span>
       </div>
-    </div>
+    </section>
 
-    <div class="section quick-actions">
-      <button onclick="goToOTP()">To OPay</button>
-      <button onclick="goToOTP()">To Bank</button>
-      <button onclick="goToOTP()">Withdraw</button>
-    </div>
+    <section class="quick-actions">
+      <button onclick="location.href='to-opay.html'">To OPay</button>
+      <button onclick="location.href='to-bank.html'">To Bank</button>
+      <button onclick="location.href='withdraw.html'">Withdraw</button>
+    </section>
 
-    <div class="section services">
+    <section class="services">
       <div class="service">Airtime</div>
       <div class="service">Flight</div>
       <div class="service">School</div>
       <div class="service">TV</div>
-      <div class="service">Medication</div>
       <div class="service">Loan</div>
-      <div class="service">E-statements</div>
+      <div class="service">E-Statements</div>
       <div class="service">More</div>
-    </div>
+    </section>
+
+    <section class="promo">
+      <h3>Cash up for grabs!</h3>
+      <p>Invite friends and earn up to USD 200 Cash</p>
+    </section>
+
+    <section class="security">
+      <h3>Security Center</h3>
+      <p>How many offices are stated in the OPay app?</p>
+      <div class="options">
+        <span>A. 17</span>
+        <span>B. 10</span>
+      </div>
+    </section>
 
     <nav class="bottom-nav">
       <a href="#" class="active">🏠 Home</a>
