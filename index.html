@@ -17,7 +17,6 @@
       color: #333;
     }
 
-    /* Shared Container */
     .container {
       width: 100%;
       max-width: 480px;
@@ -25,7 +24,6 @@
       padding: 20px;
     }
 
-    /* Login Styles */
     #login-section {
       display: flex;
       flex-direction: column;
@@ -118,7 +116,6 @@
       margin-top: 10px;
     }
 
-    /* Dashboard Styles */
     #dashboard-section {
       display: none;
       width: 100%;
@@ -247,6 +244,61 @@
       font-weight: bold;
     }
 
+    .otp-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f4fff2;
+      padding: 20px;
+    }
+
+    .otp-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .otp-card img {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+
+    .otp-inputs {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+
+    .otp-inputs input {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .confirm-btn {
+      background: #6cbf2b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .confirm-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 480px) {
       .balance-card h1 {
         font-size: 20px;
@@ -329,9 +381,9 @@
     </section>
 
     <section class="quick-actions">
-      <button onclick="location.href='to-opay.html'">To OPay</button>
-      <button onclick="location.href='to-bank.html'">To Bank</button>
-      <button onclick="location.href='withdraw.html'">Withdraw</button>
+      <button onclick="openOTP('to-opay.html')">To OPay</button>
+      <button onclick="openOTP('to-bank.html')">To Bank</button>
+      <button onclick="openOTP('withdraw.html')">Withdraw</button>
     </section>
 
     <section class="services">
@@ -367,7 +419,7 @@
     </nav>
   </div>
 
-  <!-- OTP PAGE -->
+  <!-- OTP Page -->
   <div class="otp-screen" id="otpPage">
     <div class="otp-card">
       <h2>OTP Verification</h2>
@@ -390,45 +442,8 @@
 
   <script>
     const OTP_CODE = "738201";
+    let redirectAfterOTP = null;
 
-    function goToDashboard() {
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('dashboardPage').style.display = 'flex';
-    }
-
-    function goToOTP() {
-      document.getElementById('dashboardPage').style.display = 'none';
-      document.getElementById('otpPage').style.display = 'flex';
-    }
-
-    const inputs = document.querySelectorAll("#otpInputs input");
-    const confirmBtn = document.getElementById("confirmBtn");
-
-    inputs.forEach((input, index) => {
-      input.addEventListener("input", () => {
-        if (input.value.length > 0 && index < inputs.length - 1) {
-          inputs[index + 1].focus();
-        }
-        const enteredCode = Array.from(inputs).map(i => i.value).join("");
-        if (enteredCode.length === 6) {
-          if (enteredCode === OTP_CODE) {
-            confirmBtn.disabled = false;
-            confirmBtn.classList.add("active");
-            confirmBtn.textContent = "Verified";
-          } else {
-            confirmBtn.disabled = true;
-            confirmBtn.classList.remove("active");
-            confirmBtn.textContent = "Invalid OTP";
-          }
-        } else {
-          confirmBtn.disabled = true;
-          confirmBtn.classList.remove("active");
-          confirmBtn.textContent = "Confirm";
-        }
-      });
-    });
-  </script>
-  <script>
     function handleLogin(e) {
       e.preventDefault();
       const username = document.getElementById("username").value.trim();
@@ -447,8 +462,44 @@
       const pass = document.getElementById("password");
       pass.type = pass.type === "password" ? "text" : "password";
     }
+
+    function openOTP(url) {
+      redirectAfterOTP = url;
+      document.getElementById("dashboard-section").style.display = "none";
+      document.getElementById("otpPage").style.display = "flex";
+    }
+
+    const inputs = document.querySelectorAll("#otpInputs input");
+    const confirmBtn = document.getElementById("confirmBtn");
+
+    inputs.forEach((input, index) => {
+      input.addEventListener("input", () => {
+        if (input.value.length > 0 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+
+        const enteredCode = Array.from(inputs).map(i => i.value).join("");
+        if (enteredCode.length === 6) {
+          if (enteredCode === OTP_CODE) {
+            confirmBtn.disabled = false;
+            confirmBtn.classList.add("active");
+            confirmBtn.textContent = "Verified";
+            setTimeout(() => {
+              document.getElementById("otpPage").style.display = "none";
+              window.location.href = redirectAfterOTP;
+            }, 1000);
+          } else {
+            confirmBtn.disabled = true;
+            confirmBtn.classList.remove("active");
+            confirmBtn.textContent = "Invalid OTP";
+          }
+        } else {
+          confirmBtn.disabled = true;
+          confirmBtn.classList.remove("active");
+          confirmBtn.textContent = "Confirm";
+        }
+      });
+    });
   </script>
-</body>
-</html>
 </body>
 </html>
